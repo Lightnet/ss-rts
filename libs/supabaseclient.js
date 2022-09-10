@@ -1,4 +1,8 @@
-
+/*
+  Project Name: ss-rts
+  License: MIT
+  Created by: Lightnet
+*/
 
 import { createClient } from '@supabase/supabase-js'
 
