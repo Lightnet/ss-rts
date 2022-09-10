@@ -22,6 +22,7 @@ import { Router, useRoutes } from '@solidjs/router';
 import ThemeProvider from "./components/theme/ThemeProvider";
 import IndexMenus from "./components/IndexMenus";
 import Home from './pages/index.jsx';
+import { AuthProvider } from "./components/auth/AuthProvider";
 
 const routes = [
   {
@@ -32,6 +33,10 @@ const routes = [
     path: '/about',
     component: lazy(() => import('./pages/about')),
   },
+  {
+    path: '/game',
+    component: lazy(() => import('./pages/game')),
+  },
 ];
 
 const App = () => {
@@ -39,8 +44,10 @@ const App = () => {
 
   return (
     <ThemeProvider>
-      <IndexMenus/>
-      <Route />
+      <AuthProvider>
+        <IndexMenus/>
+        <Route />
+      </AuthProvider>
     </ThemeProvider>
   );
 };

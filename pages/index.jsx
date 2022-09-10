@@ -10,9 +10,11 @@ import { supabase } from '../libs/supabaseclient.js';
 //import { AuthSession } from '@supabase/supabase-js'
 import Auth from '../components/auth/Auth.jsx';
 import Account  from '../components/auth/Account.jsx';
+import { useAuth } from '../components/auth/AuthProvider.jsx';
 
 export default function PageHome() {
-  const [session, setSession] = createSignal(null)
+  //const [session, setSession] = createSignal(null)
+  const [session, {setSession}] = useAuth();
 
   createEffect(() => {
     console.log(supabase.auth)
