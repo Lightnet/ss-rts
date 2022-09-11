@@ -1,8 +1,11 @@
 import { 
   createSignal
+, createEffect
 , createContext
 , useContext 
 } from "solid-js";
+
+import { supabase } from '../../libs/supabaseclient.js';
 
 const AuthContext = createContext();
 
@@ -20,6 +23,12 @@ export function AuthProvider(props) {
         }
       }
     ];
+  //get data
+  createEffect(() => {
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session)
+    })
+  })
 
   return (
     <AuthContext.Provider value={value}>

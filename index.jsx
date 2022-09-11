@@ -37,6 +37,14 @@ const routes = [
     path: '/game',
     component: lazy(() => import('./pages/game')),
   },
+  {
+    path: '/publicchat',
+    component: lazy(() => import('./pages/publicchat')),
+  },
+  {
+    path: '/todolist',
+    component: lazy(() => import('./pages/todolist')),
+  },
 ];
 
 const App = () => {

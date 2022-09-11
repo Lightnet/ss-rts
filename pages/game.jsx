@@ -6,7 +6,6 @@
 
 import { createEffect, createSignal } from 'solid-js'
 
-import { supabase } from '../libs/supabaseclient.js';
 import Auth from '../components/auth/Auth.jsx';
 import { useAuth } from '../components/auth/AuthProvider.jsx';
 import Access from '../components/auth/Access.jsx'; 
