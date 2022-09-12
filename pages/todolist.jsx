@@ -19,9 +19,9 @@ function PageToDoList(){
 
   const fetchTodos = async () => {
     let { data: todos, error } = await supabase
-        .from("todos")
-        .select("*")
-        .order("id", { ascending: false });
+      .from("todos")
+      .select("*")
+      .order("id", { ascending: false });
     if (error) console.log("error", error);
     
     else setTodos(todos);
@@ -30,10 +30,10 @@ function PageToDoList(){
 
   const deleteTodo = async (id) => {
     try {
-        await supabase.from("todos").delete().eq("id", id);
-        setTodos(state=> state.filter((x) => x.id !== id));
+      await supabase.from("todos").delete().eq("id", id);
+      setTodos(state=> state.filter((x) => x.id !== id));
     } catch (error) {
-        console.log("error", error);
+      console.log("error", error);
     }
   };
 

@@ -1,20 +1,21 @@
-
-
+/*
+  Project Name: ss-rts
+  License: MIT
+  Created by: Lightnet
+*/
 
 // https://supabase.com/docs/guides/with-react
 
 import { createEffect, createSignal } from 'solid-js'
 import { supabase } from '../../libs/supabaseclient'
 
-export default function Avatar({ url, size, onUpload }) {
-  const [avatarUrl, setAvatarUrl] = createSignal(null)
+//export default function Avatar({ url, size, onUpload }) {//does not watch changes?
+export default function Avatar(props) {
+  const [avatarUrl, setAvatarUrl] = createSignal(props.url || null)
   const [uploading, setUploading] = createSignal(false)
 
-  createEffect(() => {
-    if (url) downloadImage(url)
-  })
-
   const downloadImage = async (path) => {
+    //console.log(path)
     try {
       const { data, error } = await supabase.storage
         .from('avatars')
@@ -39,7 +40,11 @@ export default function Avatar({ url, size, onUpload }) {
 
       const file = event.target.files[0]
       const fileExt = file.name.split('.').pop()
-      const fileName = `${Math.random()}.${fileExt}`
+      let uuid = crypto.randomUUID().replaceAll("-","")
+      //console.log(uuid)
+      //const fileName = `${Math.random()}.${fileExt}`
+      const fileName = `avatar${uuid}.${fileExt}`
+      //console.log(fileName)
       const filePath = `${fileName}`
 
       let { error: uploadError } = await supabase.storage
@@ -50,7 +55,7 @@ export default function Avatar({ url, size, onUpload }) {
         throw uploadError
       }
 
-      onUpload(filePath)
+      props.onUpload(filePath)
     } catch (error) {
       alert(error.message)
     } finally {
@@ -58,15 +63,22 @@ export default function Avatar({ url, size, onUpload }) {
     }
   }
 
+  createEffect(() => {
+    //console.log(props.url)
+    if (props.url) downloadImage(props.url)
+  })
+
   return (
-    <div style={{ width: size }} aria-live="polite">
+    <div style={{ width: props.size }} aria-live="polite">
       <img
-        src={avatarUrl ? avatarUrl : `https://place-hold.it/${size}x${size}`}
-        alt={avatarUrl ? 'Avatar' : 'No image'}
+        width={props.size}
+        height={props.size}
+        src={avatarUrl() ? avatarUrl() : `https://place-hold.it/${props.size}x${props.size}`}
+        alt={avatarUrl() ? 'Avatar' : 'No image'}
         className="avatar image"
-        style={{ height: size, width: size }}
+        style={{ height: props.size, width: props.size }}
       />
-      {uploading ? (
+      {uploading() ? (
         'Uploading...'
       ) : (
         <>
@@ -78,7 +90,7 @@ export default function Avatar({ url, size, onUpload }) {
               id="single"
               accept="image/*"
               onChange={uploadAvatar}
-              disabled={uploading}
+              disabled={uploading()}
             />
         </>
       )}

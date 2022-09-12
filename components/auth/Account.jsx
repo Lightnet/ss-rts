@@ -9,12 +9,13 @@
 //import { AuthSession } from '@supabase/supabase-js'
 import { createEffect, createSignal } from 'solid-js'
 import { supabase } from '../../libs/supabaseclient'
+import Avatar from './Avatar'
 
 const Account = ({ session }) => {
   const [loading, setLoading] = createSignal(true)
   const [username, setUsername] = createSignal("test")
   const [website, setWebsite] = createSignal("E")
-  const [avatarUrl, setAvatarUrl] = createSignal("none")
+  const [avatarUrl, setAvatarUrl] = createSignal(null)
 
   createEffect(() => {
     getProfile()
@@ -23,13 +24,13 @@ const Account = ({ session }) => {
   const getProfile = async () => {
     try {
       setLoading(true)
-      console.log(session)
+      //console.log(session)
       const { user } = session
 
       let { data, error, status } = await supabase
         .from('profiles')
         //.select(`username, website, avatar_url`)
-        .select(`id, username, website`)
+        .select(`username, website, avatar_url`)
         .eq('id', user.id)
         .single()
 
@@ -41,7 +42,7 @@ const Account = ({ session }) => {
         console.log(data)
         setUsername(data.username)
         setWebsite(data.website)
-        //setAvatarUrl(data.avatar_url)
+        setAvatarUrl(data.avatar_url)
       }
     } catch (error) {
       if (error instanceof Error) {
@@ -53,14 +54,14 @@ const Account = ({ session }) => {
   }
 
   const updateProfile = async (e) => {
-    e.preventDefault()
+    //e.preventDefault()
 
     try {
       setLoading(true)
       const { user } = session
 
       const updates = {
-        //id: user.id,
+        id: user.id,
         username: username(),
         website: website(),
         avatar_url: avatarUrl(),
@@ -102,6 +103,16 @@ const Account = ({ session }) => {
             type="text"
             value={website() || ''}
             onChange={(e) => setWebsite(e.currentTarget.value)}
+          />
+        </div>
+        <div>
+          <Avatar 
+            url={avatarUrl()}
+            size={64}
+            onUpload={(url) => {
+              setAvatarUrl(url)
+              updateProfile({})
+            }}
           />
         </div>
         <div>
