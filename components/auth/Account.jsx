@@ -13,8 +13,8 @@ import Avatar from './Avatar'
 
 const Account = ({ session }) => {
   const [loading, setLoading] = createSignal(true)
-  const [username, setUsername] = createSignal("test")
-  const [website, setWebsite] = createSignal("E")
+  const [username, setUsername] = createSignal("")
+  const [website, setWebsite] = createSignal("")
   const [avatarUrl, setAvatarUrl] = createSignal(null)
 
   createEffect(() => {
